@@ -1,0 +1,12 @@
+package token;
+
+public enum Componentes {
+	NUMEROS,
+	SUMA,
+	RESTA,
+	MULTIPLICACION,
+	DIVISION,
+	PARENTESIS_IZQUIERDO,
+	PARENTESIS_DERECHO,
+	FIN
+}
