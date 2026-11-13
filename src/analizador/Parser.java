@@ -26,13 +26,15 @@ public class Parser {
 	
 	public double analizarExpresion() {
 		double resultado = analizarSumaResta();
-		if(posicion < tokens.size()) {
-	        if(obtenerTokenActual().getTipo() == Componentes.PARENTESIS_DERECHO) {
-	            throw new RuntimeException("Falta el parentesis izquierdo!");
-	        }
-	        throw new RuntimeException("Falta un operador!");
+	    if(obtenerTokenActual().getTipo() == Componentes.FIN) {
+	        avanzarToken();
+	        return resultado;
 	    }
-		return resultado;
+	    if(obtenerTokenActual().getTipo() == Componentes.PARENTESIS_DERECHO) {
+	        throw new RuntimeException("Falta el parentesis izquierdo!");
+	    }
+
+	    throw new RuntimeException("Falta un operador!");
 	}
 	
 	public double analizarSumaResta() {
