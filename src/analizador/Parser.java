@@ -13,37 +13,40 @@ public class Parser {
 		this.tokens = tokens;
 	}
 	
-	private Token actual() {
+	private Token obtenerTokenActual() {
+		if (posicion >= tokens.size()) {
+	        throw new RuntimeException("Expresion incompleta!");
+	    }
 		return tokens.get(posicion);
 	}
 	
-	private void siguiente() {
+	private void avanzarToken() {
 		posicion++;
 	}
 	
-	public double parse() {
-		double resultado = operacion();
+	public double analizarExpresion() {
+		double resultado = analizarSumaResta();
 		if(posicion < tokens.size()) {
-	        if(actual().getTipo() == Componentes.PARENTESIS_DERECHO) {
+	        if(obtenerTokenActual().getTipo() == Componentes.PARENTESIS_DERECHO) {
 	            throw new RuntimeException("Falta el parentesis izquierdo!");
 	        }
+	        throw new RuntimeException("Falta un operador!");
 	    }
 		return resultado;
 	}
 	
-	// Se evalua al final suma o resta
-	public double operacion() {
-		double resultado = muldiv();
+	public double analizarSumaResta() {
+		double resultado = analizarMultiplicacionDivision();
 		
 		while(posicion < tokens.size()) {
-			Token token = actual();
+			Token token = obtenerTokenActual();
 			
 			if(token.getTipo() == Componentes.SUMA) {
-				siguiente();
-				resultado += muldiv();
+				avanzarToken();
+				resultado += analizarMultiplicacionDivision();
 			}else if(token.getTipo() == Componentes.RESTA) {
-				siguiente();
-				resultado -= muldiv();
+				avanzarToken();
+				resultado -= analizarMultiplicacionDivision();
 			}else {
 				break;
 			}
@@ -52,19 +55,18 @@ public class Parser {
 		return resultado;
 	}
 	
-	// Se evalua primero si hay multiplicacion o division
-	private double muldiv() {
-		double resultado = numero();
+	private double analizarMultiplicacionDivision() {
+		double resultado = analizarNumero();
 		
 		while(posicion < tokens.size()) {
-			Token token = actual();
+			Token token = obtenerTokenActual();
 			
 			if(token.getTipo() == Componentes.MULTIPLICACION) {
-				siguiente();
-				resultado *= numero();
+				avanzarToken();
+				resultado *= analizarNumero();
 			}else if(token.getTipo() == Componentes.DIVISION) {
-				siguiente();
-				double valor = numero();
+				avanzarToken();
+				double valor = analizarNumero();
 				if(valor == 0) {
 					throw new RuntimeException("No se puede dividir entre 0!");
 				}
@@ -77,28 +79,32 @@ public class Parser {
 		return resultado;
 	}
 	
-	private double numero() {
-		Token token = actual();
+	private double analizarNumero() {
+		Token token = obtenerTokenActual();
 		
 		if(token.getTipo() == Componentes.SUMA || token.getTipo() == Componentes.RESTA || token.getTipo() == Componentes.MULTIPLICACION || token.getTipo() == Componentes.DIVISION) {
 			throw new RuntimeException("Operadores consecutivos!");
 		}
 		
 		if(token.getTipo() == Componentes.NUMEROS) {
-			siguiente();
+			avanzarToken();
 			return Double.parseDouble(token.getValor());		
 		}
 		
-		// Parentesis primero
 		if(token.getTipo() == Componentes.PARENTESIS_IZQUIERDO) {
-			siguiente();
+			avanzarToken();
 			
-			double resultado = operacion();
-			if(actual().getTipo() != Componentes.PARENTESIS_DERECHO) {
-				throw new RuntimeException("Falta el parentesis derecho!");
-			}
+			if (obtenerTokenActual().getTipo() == Componentes.PARENTESIS_DERECHO) {
+		        throw new RuntimeException("No se permiten parentesis vacios!");
+		    }
+
+		    double resultado = analizarSumaResta();
+
+		    if (obtenerTokenActual().getTipo() != Componentes.PARENTESIS_DERECHO) {
+		        throw new RuntimeException("Falta el parentesis derecho!");
+		    }
 			
-			siguiente();
+			avanzarToken();
 			
 			return resultado;
 		}

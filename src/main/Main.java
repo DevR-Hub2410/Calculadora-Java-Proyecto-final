@@ -14,7 +14,7 @@ public class Main {
 			Lexer lexer = new Lexer(operacion);
 			List<Token> tokens = lexer.analizador();
 			Parser parser = new Parser(tokens);
-			double resultado = parser.parse();
+			double resultado = parser.analizarExpresion();
 			
 			if(vertokens) {
 				System.out.println("TOKENS: ");
