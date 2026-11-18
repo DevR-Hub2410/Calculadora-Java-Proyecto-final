@@ -38,7 +38,7 @@ Proyecto Teoria/
 
 ## Requisitos
 
-- JDK 8 o superior (probado con JDK 21).
+- JDK (probado con JDK 21).
 - SWI-Prolog instalado y con el comando `swipl` disponible en el PATH.
   Si no está, el programa Java sigue funcionando y solo muestra
   `[Prolog] No se pudo ejecutar SWI-Prolog`.
