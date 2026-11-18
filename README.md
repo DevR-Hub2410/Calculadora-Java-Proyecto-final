@@ -45,8 +45,10 @@ Proyecto Teoria/
 
 ## Cómo ejecutar
 
-**Importante:** todos los comandos se ejecutan desde la carpeta raíz del proyecto
+### **Importante:** 
+1. Todos los comandos se ejecutan desde la carpeta raíz del proyecto
 (la que contiene `src` y `prolog`), porque Java busca el archivo en `prolog/proyectoEquipo1.pl`.
+2. Al "Abrir la carpeta" se tiene que seleccionar especificamente la carpeta "Proyecto Teoria" debido a un problema raro de java al querer abrir el archivo del codigo de prolog.
 
 ### 1. Programa completo (Java + Prolog)
 
